@@ -17,7 +17,7 @@
 - All crud opperations
 - A cart
 - Payment Service with Stripe
-- Admin dashboard to controll the app
+- Admin dashboard to control the app
 
 #### To run the application
 
