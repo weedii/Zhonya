@@ -16,11 +16,11 @@
   - cd client
   - npm install
   - npm run dev
-  - GO ON http:localhost:3000
+  - GO ON http://localhost:3000
 - #### Backend:
   - cd server
   - run the app from your editor or type ($ mvn spring-boot:run)
-  - GO ON http:localhost:8080/api/v1
+  - GO ON http://localhost:8080/api/v1
 
 ## License :busts_in_silhouette:
 
