@@ -1,8 +1,8 @@
 # Zhonya
 
-## <img src="https://github.com/weedii/Zhonya/blob/main/images/zhonya-white.png?raw=true" width=100% height=50% />
-
 ## <img src="https://github.com/weedii/Zhonya/blob/main/images/zhonya-black.png?raw=true" width=100% height=50% />
+
+## <img src="https://github.com/weedii/Zhonya/blob/main/images/zhonya-white.png?raw=true" width=100% height=50% />
 
 #### Zhonya is a web application (Like and e-commerce app) for selling watches
 
