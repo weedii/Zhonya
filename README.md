@@ -1,6 +1,16 @@
 # Zhonya
 
+## <img src="https://github.com/weedii/Zhonya/blob/main/zhonya-white.png?raw=true" width=100% height=50% />
+
+## <img src="https://github.com/weedii/Zhonya/blob/main/zhonya-black.png?raw=true" width=100% height=50% />
+
 #### Zhonya is a web application (Like and e-commerce app) for selling watches
+
+#### built using
+
+- Next js 15 for the Frontend
+- Spring Boot for the Backend
+- Postgresql as the database
 
 #### It includes:
 
@@ -16,11 +26,9 @@
   - cd client
   - npm install
   - npm run dev
-  - GO ON http://localhost:3000
 - #### Backend:
   - cd server
   - run the app from your editor or type ($ mvn spring-boot:run)
-  - GO ON http://localhost:8080/api/v1
 
 ## License :busts_in_silhouette:
 
