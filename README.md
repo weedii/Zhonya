@@ -6,7 +6,7 @@
 
 #### Zhonya is a web application (Like and e-commerce app) for selling watches
 
-#### built using
+#### Zhonya was built using
 
 - Next js 15 for the Frontend
 - Spring Boot for the Backend
