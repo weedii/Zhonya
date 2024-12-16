@@ -28,6 +28,7 @@
   - npm run dev
 - #### Backend:
   - cd server
+  - setup a database & change datasource connection in .yml file
   - run the app from your editor or type ($ mvn spring-boot:run)
 
 ## License :busts_in_silhouette:
