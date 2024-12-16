@@ -38,4 +38,5 @@ application:
       endpoint-secret: ${STRIPE_ENDPOINT_SECRET}
 
   frontend:
+    url: ${FRONTEND_URL}
     social-signin-redirect-url: ${SOCIAL_SIGNIN_REDIRECT_URL}
