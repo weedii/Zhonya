@@ -30,9 +30,15 @@ public class SecurityConfig {
                                 .cors(Customizer.withDefaults())
                                 .csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(req -> req.requestMatchers(
+                                                "/",
                                                 "/auth/**",
                                                 "/watches/**",
-                                                "orders/webhook").permitAll().anyRequest().authenticated())
+                                                "orders/webhook",
+                                                "/v2/api-docs",
+                                                "/v3/api-docs",
+                                                "/v3/api-docs/**",
+                                                "/swagger-ui/**",
+                                                "/swagger-ui.html").permitAll().anyRequest().authenticated())
                                 .oauth2Login(oauth2 -> oauth2
                                                 .successHandler(customOAuth2SuccessHandler))
                                 .sessionManagement(session -> session
