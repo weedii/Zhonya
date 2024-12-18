@@ -26,10 +26,13 @@
   - cd client
   - npm install
   - npm run dev
+  - Go on http://localhost:3000
 - #### Backend:
   - cd server
   - setup a database & change datasource connection in .yml file
   - run the app from your editor or type ($ mvn spring-boot:run)
+  - Go on http://localhost:8080/api/v1
+  - ##### For the documentation go to: http://localhost:8080/api/v1/swagger-ui/index.html
 
 ## License :busts_in_silhouette:
 
