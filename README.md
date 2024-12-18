@@ -32,7 +32,7 @@
   - setup a database & change datasource connection in .yml file
   - run the app from your editor or type ($ mvn spring-boot:run)
   - Go on http://localhost:8080/api/v1
-  - ##### For the documentation go to: https://zhonya-server.onrender.com/api/v1/swagger-ui/index.html
+  - ##### For the documentation go to: http://localhost:8080/api/v1/swagger-ui/index.html
 
 ## License :busts_in_silhouette:
 
