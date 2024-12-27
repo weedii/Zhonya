@@ -4,7 +4,7 @@ import Loader from "@/app/components/common/Loader";
 import Container from "@/app/components/Container";
 import BaseURL from "@/app/constants/BaseURL";
 import extractUserInfo from "@/app/lib/decodeJwt";
-import { saveToken, saveUser } from "@/redux/UserSlice";
+import { signIn } from "@/redux/UserSlice";
 import axios from "axios";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
@@ -18,6 +18,13 @@ interface formDataProps {
   password: string;
 }
 
+interface userInfoProps {
+  id: number;
+  email: string;
+  name: string;
+  role: string;
+}
+
 const SigninPage = () => {
   const [showPass, setShowPass] = useState<boolean>(false);
   const [formData, setFormData] = useState<formDataProps>({
@@ -28,7 +35,7 @@ const SigninPage = () => {
   const [validationErrors, setValidationErrors] = useState([]);
   const router = useRouter();
   const dispatch = useDispatch();
-  const userData = useSelector((state: any) => state.user);
+  const userData = useSelector((state: any) => state.user.userInfo);
 
   const toggleShowPass = () => {
     setShowPass(!showPass);
@@ -68,14 +75,23 @@ const SigninPage = () => {
     try {
       setValidationErrors([]);
       setLoading(true);
-      const res = await axios.post(`${BaseURL}/auth/authenticate`, {
-        email: formData.email,
-        password: formData.password,
-      });
-      // extract userInfo from the token then save them
-      const userInfo = extractUserInfo(res.data.token);
-      dispatch(saveToken(res.data.token));
-      dispatch(saveUser(userInfo));
+      const res = await axios.post(
+        `${BaseURL}/auth/authenticate`,
+        {
+          email: formData.email,
+          password: formData.password,
+        },
+        { withCredentials: true }
+      );
+
+      const userInfo: userInfoProps = {
+        id: res.data.id,
+        email: res.data.email,
+        name: res.data.name,
+        role: res.data.role,
+      };
+
+      dispatch(signIn(userInfo));
 
       // wait until save user then navigate
       await Promise.resolve(2000);
@@ -108,14 +124,14 @@ const SigninPage = () => {
 
   // if user is connected redirect it
   useEffect(() => {
-    if (userData.token !== null) return redirect("/");
+    if (userData !== null) return redirect("/");
   }, [userData]);
 
   return (
     <Container>
       <div className="min-h-screen h-full pb-20 flex flex-col justify-center items-center relative">
         {loading && (
-          <Loader className="absolute z-20 w-3/4 h-3/4 flex items-center justify-center bg-whiteSmoke/50 rounded-md" />
+          <Loader className="absolute z-20 w-full md:w-3/4 h-3/4 flex items-center justify-center bg-whiteSmoke/50 rounded-md" />
         )}
         <form
           className="w-full  md:w-1/2 h-1/2 flex flex-col gap-7"

@@ -8,8 +8,6 @@ import axios from "axios";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { BsArrowRight } from "react-icons/bs";
-import { FiArrowRight } from "react-icons/fi";
 import {
   MdOutlineKeyboardArrowDown,
   MdOutlineKeyboardArrowRight,
@@ -36,7 +34,7 @@ interface OrderProps {
 }
 
 const OrdersPage = () => {
-  const userData = useSelector((state: any) => state.user);
+  const userData = useSelector((state: any) => state.user.userInfo);
   const [orders, setOrders] = useState<OrderProps[] | []>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [openedOrderId, setOpenedOrderId] = useState<string | null>(null);
@@ -44,7 +42,7 @@ const OrdersPage = () => {
   const fetchUserOrders = async () => {
     try {
       const res = await axios.get(`${BaseURL}/orders`, {
-        headers: { Authorization: `Bearer ${userData.token}` },
+        withCredentials: true,
       });
       setOrders(res.data);
       setLoading(false);

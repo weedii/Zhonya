@@ -15,7 +15,7 @@ import Loader from "./common/Loader";
 
 const CartContainer = () => {
   const { cartItems } = useSelector((state: any) => state.cart);
-  const userData = useSelector((state: any) => state.user);
+  const userData = useSelector((state: any) => state.user.userInfo);
   const dispatch = useDispatch();
   const [disabledPayment, setDisabledPayment] = useState<boolean>();
   const [totalAmount, setTotalAmount] = useState<number>(0);
@@ -44,11 +44,7 @@ const CartContainer = () => {
       const res = await axios.post(
         `${BaseURL}/orders`,
         { items: cartItems },
-        {
-          headers: {
-            Authorization: `Bearer ${userData.token}`,
-          },
-        }
+        { withCredentials: true }
       );
       setLoading(false);
       window.location.href = res.data.sessionUrl;
@@ -61,7 +57,7 @@ const CartContainer = () => {
   };
 
   useEffect(() => {
-    if (userData.token === null) {
+    if (!userData) {
       setDisabledPayment(true);
     }
   }, [userData]);

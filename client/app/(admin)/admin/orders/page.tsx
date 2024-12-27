@@ -50,7 +50,7 @@ interface ResponseProps {
 }
 
 const OrdersPages = () => {
-  const userData = useSelector((state: any) => state.user);
+  const userData = useSelector((state: any) => state.user.userInfo);
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(0));
   const [orders, setOrders] = useState<ResponseProps | null>();
   const [openedOrderId, setOpenedOrderId] = useState<string | null>(null);
@@ -59,7 +59,7 @@ const OrdersPages = () => {
   const fetchOrders = async () => {
     try {
       const res = await axios.get(`${BaseURL}/admin/orders`, {
-        headers: { Authorization: `Bearer ${userData.token}` },
+        withCredentials: true,
         params: { page: page },
       });
       if (res.data) {
@@ -82,7 +82,7 @@ const OrdersPages = () => {
     try {
       setLoading(true);
       await axios.delete(`${BaseURL}/admin/orders/${openedOrderId}`, {
-        headers: { Authorization: `Bearer ${userData.token}` },
+        withCredentials: true,
       });
       setOpenedOrderId(null);
       await fetchOrders();
@@ -115,10 +115,8 @@ const OrdersPages = () => {
 
   useEffect(() => {
     if (!userData) return redirect("/signin");
-    if (!userData.token) return redirect("/signin");
     // check user role
-    if (userData.token && userData.userInfo.role !== "ADMIN")
-      return redirect("/");
+    if (userData && userData.role !== "ADMIN") return redirect("/");
   }, [userData]);
 
   useEffect(() => {

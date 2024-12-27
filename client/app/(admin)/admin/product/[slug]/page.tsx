@@ -33,9 +33,9 @@ const ProductPage = ({ params }: Props) => {
   const resolvedParams = use(params); // Unwrap the params Promise
   const { slug } = resolvedParams;
 
+  const userData = useSelector((state: any) => state.user.userInfo);
   const [product, setProduct] = useState<ProductData | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const userData = useSelector((state: any) => state.user);
   const router = useRouter();
   const [updatePrice, setUpdatePrice] = useState<boolean>(false);
   const [updateQuantity, setUpdateQuantity] = useState<boolean>(false);
@@ -60,9 +60,7 @@ const ProductPage = ({ params }: Props) => {
     try {
       setLoading(true);
       await axios.delete(`${BaseURL}/admin/watches/${slug}`, {
-        headers: {
-          Authorization: `Bearer ${userData.token}`,
-        },
+        withCredentials: true,
       });
       setLoading(false);
       router.push("/admin/products");
@@ -82,11 +80,7 @@ const ProductPage = ({ params }: Props) => {
           quantity: updatedQuantity ? updatedQuantity : null,
           description: updatedDesc ? updatedDesc : null,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${userData.token}`,
-          },
-        }
+        { withCredentials: true }
       );
       window.location.reload();
     } catch (error) {
@@ -101,10 +95,8 @@ const ProductPage = ({ params }: Props) => {
 
   useEffect(() => {
     if (!userData) return redirect("/signin");
-    if (!userData.token) return redirect("/signin");
     // check user role
-    if (userData.token && userData.userInfo.role !== "ADMIN")
-      return redirect("/");
+    if (userData && userData.role !== "ADMIN") return redirect("/");
   }, [userData]);
 
   if (product)

@@ -12,11 +12,11 @@ import { useEffect, useState } from "react";
 
 const Header = () => {
   const cartData = useSelector((state: any) => state?.cart);
-  const userData = useSelector((state: any) => state?.user);
+  const userData = useSelector((state: any) => state?.user.userInfo);
   const [userExists, setUserExists] = useState<boolean>(false);
 
   useEffect(() => {
-    if (userData.token !== null) {
+    if (userData !== null) {
       setUserExists(true);
     } else {
       setUserExists(false);

@@ -19,19 +19,19 @@ interface userDataProps {
 }
 
 const UsersPage = () => {
-  const userData = useSelector((state: any) => state.user);
+  const userData = useSelector((state: any) => state.user.userInfo);
   const [loading, setLoading] = useState<boolean>(false);
   const [users, setUsers] = useState<userDataProps[]>([]);
 
   const getAllUsers = async () => {
     try {
       const res = await axios.get(`${BaseURL}/admin/users`, {
-        headers: {
-          Authorization: `Bearer ${userData.token}`,
-        },
+        withCredentials: true,
       });
       setUsers(res.data);
     } catch (error) {
+      console.log(error);
+
       setLoading(false);
       toast.error("Error while getting users");
     }
@@ -39,10 +39,8 @@ const UsersPage = () => {
 
   useEffect(() => {
     if (!userData) return redirect("/signin");
-    if (!userData.token) return redirect("/signin");
     // check user role
-    if (userData.token && userData.userInfo.role !== "ADMIN")
-      return redirect("/");
+    if (userData && userData.role !== "ADMIN") return redirect("/");
   }, [userData]);
 
   useEffect(() => {

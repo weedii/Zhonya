@@ -14,9 +14,7 @@ const Brands = ({ userData }: { userData: any }) => {
   const fetchBrands = async () => {
     try {
       const res = await axios.get(`${BaseURL}/admin/brands`, {
-        headers: {
-          Authorization: `Bearer ${userData.token}`,
-        },
+        withCredentials: true,
       });
       setBrands(res.data);
     } catch (error) {
@@ -30,11 +28,7 @@ const Brands = ({ userData }: { userData: any }) => {
       await axios.post(
         `${BaseURL}/admin/brands`,
         { brand: newBrand },
-        {
-          headers: {
-            Authorization: `Bearer ${userData.token}`,
-          },
-        }
+        { withCredentials: true }
       );
       setNewBrand("");
       setShowNewBrand(false);
@@ -48,9 +42,7 @@ const Brands = ({ userData }: { userData: any }) => {
     try {
       await axios.delete(`${BaseURL}/admin/brands`, {
         data: { brand: brand },
-        headers: {
-          Authorization: `Bearer ${userData.token}`,
-        },
+        withCredentials: true,
       });
       fetchBrands();
     } catch (error) {

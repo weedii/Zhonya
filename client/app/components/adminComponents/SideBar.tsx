@@ -3,13 +3,16 @@
 import React, { useEffect, useState } from "react";
 import Logo from "../common/Logo";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
-import { deleteToken } from "@/redux/UserSlice";
+import { signOut } from "@/redux/UserSlice";
 import { BiMenu } from "react-icons/bi";
 import { CgClose } from "react-icons/cg";
 import { useTheme } from "next-themes";
 import ThemeSwitch from "../ThemeSwitch";
+import BaseURL from "@/app/constants/BaseURL";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const SideBar = () => {
   const navLinks = [
@@ -30,6 +33,7 @@ const SideBar = () => {
   const pathname = usePathname();
   const dispatch = useDispatch();
   const [showMenu, setShowMenu] = useState<boolean>(false);
+  const router = useRouter();
 
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -38,8 +42,14 @@ const SideBar = () => {
     setShowMenu(!showMenu);
   };
 
-  const handleLogout = () => {
-    dispatch(deleteToken());
+  const handleLogout = async () => {
+    try {
+      await axios.get(`${BaseURL}/auth`, { withCredentials: true });
+      dispatch(signOut());
+      router.push("/");
+    } catch (error) {
+      toast.error("Network error");
+    }
   };
 
   useEffect(() => {

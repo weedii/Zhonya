@@ -33,7 +33,7 @@ interface ResponseProps {
 }
 
 const ProductsPage = () => {
-  const userData = useSelector((state: any) => state.user);
+  const userData = useSelector((state: any) => state.user.userInfo);
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(0));
   const [productList, setProductList] = useState<ResponseProps | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -57,10 +57,8 @@ const ProductsPage = () => {
 
   useEffect(() => {
     if (!userData) return redirect("/signin");
-    if (!userData.token) return redirect("/signin");
     // check user role
-    if (userData.token && userData.userInfo.role !== "ADMIN")
-      return redirect("/");
+    if (userData && userData.role !== "ADMIN") return redirect("/");
   }, [userData]);
 
   return (

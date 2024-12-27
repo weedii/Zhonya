@@ -30,7 +30,6 @@ interface ResponseProps {
 }
 
 const Shop = () => {
-  const userData = useSelector((state: any) => state.user);
   const [page, setPage] = useQueryState("page", parseAsInteger.withDefault(0));
   const [productList, setProductList] = useState<ResponseProps | null>(null);
   const [loading, setLoading] = useState<boolean>(true);

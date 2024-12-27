@@ -27,7 +27,7 @@ const AddProductPage = () => {
     pictureUrl: "",
   });
   const [brands, setBrands] = useState<string[]>([]);
-  const userData = useSelector((state: any) => state.user);
+  const userData = useSelector((state: any) => state.user.userInfo);
   const router = useRouter();
 
   const handleChangeData = (e: any) => {
@@ -64,11 +64,7 @@ const AddProductPage = () => {
           price: formData.price,
           pictureUrl: formData.pictureUrl,
         },
-        {
-          headers: {
-            Authorization: `Bearer ${userData.token}`,
-          },
-        }
+        { withCredentials: true }
       );
       setLoading(false);
       router.push("/admin/products");
@@ -81,9 +77,7 @@ const AddProductPage = () => {
   const fetchBrands = async () => {
     try {
       const res = await axios.get(`${BaseURL}/admin/brands`, {
-        headers: {
-          Authorization: `Bearer ${userData.token}`,
-        },
+        withCredentials: true,
       });
       setBrands(res.data);
     } catch (error) {
@@ -97,10 +91,8 @@ const AddProductPage = () => {
 
   useEffect(() => {
     if (!userData) return redirect("/signin");
-    if (!userData.token) return redirect("/signin");
     // check user role
-    if (userData.token && userData.userInfo.role !== "ADMIN")
-      return redirect("/");
+    if (userData && userData.role !== "ADMIN") return redirect("/");
   }, [userData]);
 
   return (

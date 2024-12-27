@@ -4,7 +4,7 @@ import Loader from "@/app/components/common/Loader";
 import Container from "@/app/components/Container";
 import BaseURL from "@/app/constants/BaseURL";
 import extracttUserInfo from "@/app/lib/decodeJwt";
-import { saveToken, saveUser } from "@/redux/UserSlice";
+import { signIn } from "@/redux/UserSlice";
 import axios from "axios";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
@@ -16,6 +16,13 @@ interface formDataProps {
   name: string;
   email: string;
   password: string;
+}
+
+interface userInfoProps {
+  id: number;
+  email: string;
+  name: string;
+  role: string;
 }
 
 const SignupPage = () => {
@@ -80,16 +87,24 @@ const SignupPage = () => {
     try {
       setValidationErrors([]);
       setLoading(true);
-      const res = await axios.post(`${BaseURL}/auth/register`, {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-      });
+      const res = await axios.post(
+        `${BaseURL}/auth/register`,
+        {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+        },
+        { withCredentials: true }
+      );
 
-      // extract userInfo from the toke then save them
-      const userInfo = extracttUserInfo(res.data.token);
-      dispatch(saveToken(res.data.token));
-      dispatch(saveUser(userInfo));
+      const userInfo: userInfoProps = {
+        id: res.data.id,
+        email: res.data.email,
+        name: res.data.name,
+        role: res.data.role,
+      };
+
+      dispatch(signIn(userInfo));
 
       setLoading(false);
       router.push("/");
