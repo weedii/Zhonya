@@ -3,6 +3,7 @@ package com.madebywael.zhonya.auth;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -15,6 +16,8 @@ import com.madebywael.zhonya.user.User;
 import com.madebywael.zhonya.user.UserRepository;
 
 import jakarta.persistence.EntityExistsException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -26,8 +29,12 @@ public class AuthenticationService {
         private final PasswordEncoder passwordEncoder;
         private final JwtService jwtService;
         private final AuthenticationManager authenticationManager;
+        @Value("${application.security.jwt.jwt-cookie-domain}")
+        private String jwtCookieDomain;
+        @Value("${application.security.jwt.expiration}")
+        private int jwtExpiration;
 
-        public AuthenticationResponse register(@Valid RegisterRequest request) {
+        public AuthenticationResponse register(@Valid RegisterRequest request, HttpServletResponse response) {
                 // check if admin already exists
                 if (userRepository.findByEmail(request.getEmail()).isPresent()) {
                         throw new EntityExistsException("Email is already in use");
@@ -51,12 +58,26 @@ public class AuthenticationService {
                 // generate the token
                 String token = jwtService.generateToken(extraClaims, user);
 
+                // Create cookie with the token & Add it to response
+                Cookie jwtCookie = new Cookie("token", token);
+                jwtCookie.setHttpOnly(true);
+                jwtCookie.setPath("/");
+                jwtCookie.setMaxAge((int) System.currentTimeMillis() + jwtExpiration);
+                jwtCookie.setDomain(jwtCookieDomain);
+                jwtCookie.setSecure(true);
+
+                response.addCookie(jwtCookie);
+
                 return AuthenticationResponse.builder()
-                                .token(token)
+                                .id(user.getId())
+                                .name(user.getName())
+                                .email(user.getEmail())
+                                .role(user.getRole())
                                 .build();
         }
 
-        public AuthenticationResponse authenticate(@Valid AuthenticationRequest request) {
+        public AuthenticationResponse authenticate(
+                        @Valid AuthenticationRequest request, HttpServletResponse response) {
                 // check if the user exist in the DB
                 if (!userRepository.findByEmail(request.getEmail()).isPresent()) {
                         throw new UsernameNotFoundException("User Not found");
@@ -80,8 +101,21 @@ public class AuthenticationService {
                 // generate token
                 String token = jwtService.generateToken(extraClaims, user);
 
+                // Create cookie with the token & Add it to response
+                Cookie jwtCookie = new Cookie("token", token);
+                jwtCookie.setHttpOnly(true);
+                jwtCookie.setPath("/");
+                jwtCookie.setMaxAge((int) System.currentTimeMillis() + jwtExpiration);
+                jwtCookie.setDomain(jwtCookieDomain);
+                jwtCookie.setSecure(true);
+
+                response.addCookie(jwtCookie);
+
                 return AuthenticationResponse.builder()
-                                .token(token)
+                                .id(user.getId())
+                                .name(user.getName())
+                                .email(user.getEmail())
+                                .role(user.getRole())
                                 .build();
         }
 
@@ -100,4 +134,16 @@ public class AuthenticationService {
                                 .build();
                 userRepository.save(user);
         }
+
+        public void signout(HttpServletResponse response) {
+                Cookie jwtCookie = new Cookie("token", null);
+                jwtCookie.setHttpOnly(true);
+                jwtCookie.setPath("/");
+                jwtCookie.setMaxAge(0);
+                jwtCookie.setDomain(jwtCookieDomain);
+                jwtCookie.setSecure(true);
+
+                response.addCookie(jwtCookie);
+        }
+
 }

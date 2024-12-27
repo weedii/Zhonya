@@ -1,5 +1,7 @@
 package com.madebywael.zhonya.auth;
 
+import com.madebywael.zhonya.user.Role;
+
 import lombok.Builder;
 import lombok.Data;
 
@@ -7,6 +9,9 @@ import lombok.Data;
 @Builder
 public class AuthenticationResponse {
 
-    private String token;
+    private Long id;
+    private String name;
+    private String email;
+    private Role role;
 
 }

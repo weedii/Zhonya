@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -17,9 +18,9 @@ public class UserController {
 
     @DeleteMapping("{user-id}")
     public ResponseEntity<?> deleteUserAccount(
-            @PathVariable("user-id") Long userId) {
+            @PathVariable("user-id") Long userId, HttpServletResponse response) {
 
-        userService.deleteUserAccount(userId);
+        userService.deleteUserAccount(userId, response);
         return ResponseEntity.ok().build();
     }
 
