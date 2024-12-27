@@ -30,7 +30,8 @@ application:
   security:
     jwt:
       secret-key: ${JWT_SECRET_KEY}
-      expiration: 604800000
+      expiration: ${JWT_EXPIRATION}
+      jwt-cookie-domain: ${JWT_COOKIE_DOMAIN}
 
   payment:
     stripe:
