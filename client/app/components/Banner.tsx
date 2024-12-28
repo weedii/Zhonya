@@ -11,11 +11,11 @@ const Banner = () => {
         {/* Left half */}
         <div className="h-full z-10 absolute left-10 top-0 flex flex-col justify-center items-start isolate gap-5 md:gap-10">
           <div className="flex flex-col gap-1 md:gap-3">
-            <p className="bg-orange-500 text-white text-sm font-semibold rounded-full w-20 py-1 text-center">
+            <p className="bg-orange-500 text-white text-sm font-semibold rounded-full w-20 py-1 text-center hidden sm:block">
               Buy 250
             </p>
 
-            <p className="text-xl md:text-3xl font-semibold">Get Ready for</p>
+            <p className="text-xl md:text-3xl font-semibold hidden sm:block">Get Ready for</p>
 
             <p className="text-2xl md:text-6xl font-bold">Apple Watch</p>
 
