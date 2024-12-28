@@ -16,7 +16,6 @@ import com.madebywael.zhonya.user.User;
 import com.madebywael.zhonya.user.UserRepository;
 
 import jakarta.persistence.EntityExistsException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -58,15 +57,14 @@ public class AuthenticationService {
                 // generate the token
                 String token = jwtService.generateToken(extraClaims, user);
 
-                // Create cookie with the token & Add it to response
-                Cookie jwtCookie = new Cookie("token", token);
-                jwtCookie.setHttpOnly(true);
-                jwtCookie.setPath("/");
-                jwtCookie.setMaxAge((int) System.currentTimeMillis() + jwtExpiration);
-                jwtCookie.setDomain(jwtCookieDomain);
-                jwtCookie.setSecure(true);
+                // Create cookie manually with the token & Add it to response header
+                String cookieValue = String.format(
+                                "token=%s; Domain=%s; Max-Age=%d; Path=/; SameSite=None; Secure; HttpOnly",
+                                token,
+                                jwtCookieDomain,
+                                jwtExpiration);
 
-                response.addCookie(jwtCookie);
+                response.addHeader("Set-Cookie", cookieValue);
 
                 return AuthenticationResponse.builder()
                                 .id(user.getId())
@@ -101,15 +99,14 @@ public class AuthenticationService {
                 // generate token
                 String token = jwtService.generateToken(extraClaims, user);
 
-                // Create cookie with the token & Add it to response
-                Cookie jwtCookie = new Cookie("token", token);
-                jwtCookie.setHttpOnly(true);
-                jwtCookie.setPath("/");
-                jwtCookie.setMaxAge((int) System.currentTimeMillis() + jwtExpiration);
-                jwtCookie.setDomain(jwtCookieDomain);
-                jwtCookie.setSecure(true);
+                // Create cookie manually with the token & Add it to response header
+                String cookieValue = String.format(
+                                "token=%s; Domain=%s; Max-Age=%d; Path=/; SameSite=None; Secure; HttpOnly",
+                                token,
+                                jwtCookieDomain,
+                                jwtExpiration);
 
-                response.addCookie(jwtCookie);
+                response.addHeader("Set-Cookie", cookieValue);
 
                 return AuthenticationResponse.builder()
                                 .id(user.getId())
@@ -136,14 +133,14 @@ public class AuthenticationService {
         }
 
         public void signout(HttpServletResponse response) {
-                Cookie jwtCookie = new Cookie("token", null);
-                jwtCookie.setHttpOnly(true);
-                jwtCookie.setPath("/");
-                jwtCookie.setMaxAge(0);
-                jwtCookie.setDomain(jwtCookieDomain);
-                jwtCookie.setSecure(true);
+                // Create cookie manually with the token & Add it to response header
+                String cookieValue = String.format(
+                                "token=%s; Domain=%s; Max-Age=%d; Path=/; SameSite=None; Secure; HttpOnly",
+                                null,
+                                jwtCookieDomain,
+                                0);
 
-                response.addCookie(jwtCookie);
+                response.addHeader("Set-Cookie", cookieValue);
         }
 
 }
