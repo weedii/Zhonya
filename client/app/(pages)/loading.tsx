@@ -3,7 +3,7 @@ import Loader from "../components/common/Loader";
 
 const LoadingPage = () => {
   return (
-    <div className="min-h-[75vh] flex items-center justify-center">
+    <div className="h-full w-full">
       <Loader
         title="Loading"
         className="flex flex-col items-center justify-center gap-2"

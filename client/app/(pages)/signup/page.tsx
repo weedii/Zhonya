@@ -37,7 +37,7 @@ const SignupPage = () => {
   const [validationErrors, setValidationErrors] = useState([]);
   const router = useRouter();
   const dispatch = useDispatch();
-  const userData = useSelector((state: any) => state.user);
+  const userData = useSelector((state: any) => state.user.userInfo);
 
   const toggleShowPass = () => {
     setShowPass(!showPass);
@@ -126,7 +126,7 @@ const SignupPage = () => {
 
   // if user is connected redirect it
   useEffect(() => {
-    if (userData.token !== null) return redirect("/");
+    if (userData !== null) return redirect("/");
   }, [userData]);
 
   return (

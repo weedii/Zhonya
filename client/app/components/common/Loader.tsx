@@ -18,7 +18,12 @@ export default function Loader({
   };
 
   return (
-    <div className={twMerge("", className)}>
+    <div
+      className={twMerge(
+        "min-h-screen flex items-center justify-center",
+        className
+      )}
+    >
       <div className={twMerge("relative", sizeClasses[size])}>
         <div className="absolute inset-0 border-4 border-t-yellow-400 border-r-black border-b-white border-l-black rounded-full animate-spin"></div>
         <div className="absolute inset-2 border-4 border-t-black border-r-white border-b-yellow-400 border-l-white rounded-full animate-spin-slow"></div>
